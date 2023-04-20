@@ -48,15 +48,19 @@ public:
     }
 
 
-    ~Stydent(){
+//    ~Stydent(){
+//        Count_stydent_Object--;
+//        //qDebug() << "DESTRUCTOR STUDENT";
+//    }
+
+    virtual ~Stydent(){
         Count_stydent_Object--;
         //qDebug() << "DESTRUCTOR STUDENT";
     }
 
+
     static int Count_stydent_Object;
 };
-
-
 
 int Stydent::Count_stydent_Object = 0;
 
@@ -64,26 +68,11 @@ int Stydent::Count_stydent_Object = 0;
 
 
 
-class Student_butt : public Stydent{
-    public: QString print1() { return "VECTOR CLASS Student_butt"; }
-};
-
-
-
-
-
-Stydent a("Ukra", 2123), b("Ukra2", 2123), c("Ukra3", 2123);
-Stydent *d = new Stydent("qweqw", 123);
-
 QVector <Stydent *> Stydents_massive;
 //Stydents_massive.append(new Stydent());
 
 
-//Stydent rr("Alla", 422);
-//Stydent r3("dasd", 477);
-//Stydent rw("Ayerf", 2622);
-//Stydent ry("53dsd", 252);
-//Stydent rs("Asdg", 232);
+
 
 
 
@@ -104,23 +93,7 @@ MY_window::MY_window(QWidget *parent)
 
 
     newTble = new QTableWidget;
-    newTble->setRowCount(5);
-    newTble->setColumnCount(2);
-    //newTble->set
 
-    newTble->setItem(0,0,new QTableWidgetItem(QString("AUTO PIDAR1")));
-    newTble->setItem(0,1,new QTableWidgetItem(QString("126")));
-
-    newTble->setItem(1,0,new QTableWidgetItem(QString("AUTO PIDAR2")));
-    newTble->setItem(1,1,new QTableWidgetItem(QString("162")));
-
-    newTble->setItem(2,0,new QTableWidgetItem(QString("AUTO PIDAR3")));
-    newTble->setItem(2,1,new QTableWidgetItem(QString("148")));
-
-    newTble->setItem(3,0,new QTableWidgetItem(QString("AUTO PIDAR4")));
-    newTble->setItem(3,1,new QTableWidgetItem(QString("122")));
-
-    //newTble->setTextAlignment(Qt::AlignVCenter);
 
 
 
@@ -150,19 +123,27 @@ void MY_window::set_new_valueToColumn(){
     QTextStream out(stdout);
 
     // Checking for a class destructor
-    if(Stydent::Count_stydent_Object > 0){
-
-
-        // Setting a new value to a table
-        newTble->setItem(0,0,new QTableWidgetItem(QString(d->print_last_name())));
-        newTble->setItem(0,1,new QTableWidgetItem(QString::number(d->print_number_group())));
-
+    if(Stydent::Count_stydent_Object >= 0){
         // Debug viewing objects
         out << "Cout objects: " << Stydent::Count_stydent_Object << Qt::endl;
 
         Stydents_massive.push_back(new Stydent("mmmmmm", 126));
 
         out << "Cout objects: " << Stydent::Count_stydent_Object << Qt::endl;
+
+
+        // Setting a new value to a table
+        newTble->setRowCount(Stydents_massive.size());
+        newTble->setColumnCount(2);
+
+        qDebug() << "Количество объектов: " << Stydents_massive.size();
+
+        int vector_number_row = Stydents_massive.size();
+
+        newTble->setItem((vector_number_row - 1),0,new QTableWidgetItem(QString(Stydents_massive[vector_number_row - 1]->print_last_name())));
+        newTble->setItem((vector_number_row - 1),1,new QTableWidgetItem(QString::number(Stydents_massive[vector_number_row - 1]->print_number_group())));
+        //newTble->setItem(vector_number_row,1,new QTableWidgetItem(QString::number(d->print_number_group())));
+
     }
     //qDebug() << "+ | ";
 }
@@ -176,15 +157,23 @@ void MY_window::set_new_valueToColumn(){
 void MY_window::remove_new_valueToColumn(){
     //newTble->setItem(0,0,new QTableWidgetItem(QString("")));
 
-        newTble->removeRow(0);
+        //newTble->removeRow(0);
+    if(Stydent::Count_stydent_Object > 0){
+
+        int index_remove_rows = Stydents_massive.size();
+        Stydents_massive[index_remove_rows - 1]->~Stydent();
+        Stydents_massive.pop_back();
+
+        newTble->removeRow(index_remove_rows - 1);
+
+        if(Stydent::Count_stydent_Object == 0){
+            newTble->removeColumn(0);
+            newTble->removeColumn(0);
+        }
 
         //int let = *num_columns_added;
-        qDebug() << "- | ";
-
-
-    //num_columns_added++;
-
-    //qDebug() << *num_columns_added;
+        qDebug() << "REMOVE ROW | " << index_remove_rows;
+    }
 }
 
 void MY_window::remove_click_new_valueToColumn(int row, int column){
@@ -194,7 +183,5 @@ void MY_window::remove_click_new_valueToColumn(int row, int column){
 //    qDebug() << row;
 //    qDebug() << column;
 }
-
-
 
 
