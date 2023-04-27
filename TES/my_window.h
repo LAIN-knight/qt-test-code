@@ -23,10 +23,13 @@
 
 class MY_window : public QWidget {
 
-    Q_OBJECT // СЌС‚РѕС‚ РјР°РєСЂРѕСЃ РґРѕР»Р¶РµРЅ РІРєР»СЋС‡Р°С‚СЊСЃСЏ РІ РєР»Р°СЃСЃС‹, РєРѕС‚РѕСЂС‹Рµ РѕР±СЉСЏРІР»СЏСЋС‚ СЃРІРѕРё СЃРѕР±СЃС‚РІРµРЅРЅС‹Рµ СЃРёРіРЅР°Р»С‹ Рё СЃР»РѕС‚С‹
+    Q_OBJECT // этот макрос должен включаться в классы, которые объявляют свои собственные сигналы и слоты
 
 public:
     MY_window(QWidget *parent = 0);
+    //QString set_string_student_lastName;
+    QString set_string_student_lastName;
+    QString set_string_student_munberGroup;
 
 
 private:
@@ -35,10 +38,18 @@ private:
 
     QTableWidget *newTble;
 
+    //QString *set_string_student_lastName;
+    //QString *set_string_student_munberGroup;
+
 public slots:
     void set_new_valueToColumn();
     void remove_new_valueToColumn();
-    void remove_click_new_valueToColumn(int, int);
+
+    void indo_click_new_valueToColumn(int, int);
+
+    void get_string_student_lastName(const QString &);
+    void get_string_student_munberGroup(const QString &);
+
 };
 
 
